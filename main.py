@@ -50,6 +50,25 @@ def main():
         elif action == 'load_state':
             # Load a previously saved state from a file
             file_system.load_state(command[1])
+        elif action == 'mv':
+            if len(command) == 3:
+                source_path, destination_path = command[1], command[2]
+                try:
+                    file_system.mv(source_path, destination_path)
+                except Exception as e:
+                    print(f"Error: {e}")
+            else:
+                print("Error: Invalid 'mv' command format. Use 'mv <source_path> <destination_path>'.")
+
+        elif action == 'cp':
+            if len(command) == 3:
+                source_path, destination_path = command[1], command[2]
+                try:
+                    file_system.cp(source_path, destination_path)
+                except Exception as e:
+                    print(f"Error: {e}")
+            else:
+                print("Error: Invalid 'cp' command format. Use 'cp <source_path> <destination_path>'.")
         elif action == 'echo':
             # Join the input and split on whitespace, preserving quoted content
             command_str = ' '.join(command[1:])
