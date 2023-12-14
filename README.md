@@ -101,6 +101,14 @@ load_state state.json
 cat server.js
 ```
 
+### 11. `exit`
+
+- To exit from the command terminal.
+- Example:
+```bash
+exit
+```
+
 ## Usage
 1. Clone the repository:
 ```bash
