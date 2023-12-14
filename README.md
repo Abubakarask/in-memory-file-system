@@ -100,3 +100,17 @@ load_state state.json
 ```bash
 cat server.js
 ```
+
+## Usage
+1. Clone the repository:
+```bash
+git clone <repository_url>
+cd in-memory-file-system
+```
+
+2. Run the file system:
+```bash
+python main.py
+```
+
+3. Enter commands in the terminal and observe the file system's behavior.
