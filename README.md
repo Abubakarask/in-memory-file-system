@@ -104,7 +104,7 @@ cat server.js
 ## Usage
 1. Clone the repository:
 ```bash
-git clone <repository_url>
+git clone https://github.com/Abubakarask/in-memory-file-system.git
 cd in-memory-file-system
 ```
 
