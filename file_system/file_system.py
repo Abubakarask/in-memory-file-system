@@ -19,10 +19,13 @@ class InMemoryFileSystem:
         - directory (str): The name of the directory to create.
     """
     def mkdir(self, directory):
-        if directory not in self.file_system_structure:
-            self.file_system_structure[directory] = {}
-        else:
-            print(f"Error: Directory '{directory}' already exists.")
+        try:
+            if directory not in self.file_system_structure:
+                self.file_system_structure[directory] = {}
+            else:
+                print(f"Error: Directory '{directory}' already exists.")
+        except Exception as e:
+            print(f"Error: {e}")
 
         """
         Change the current directory.
@@ -34,16 +37,19 @@ class InMemoryFileSystem:
         - path (str): The path to navigate to.
         """
     def cd(self, path):
-        if path == '..':
-            # Move to the parent directory
-            self.current_directory = os.path.dirname(self.current_directory)
-        elif path.startswith('/'):
-            # Move to an absolute path
-            self.current_directory = path
-        else:
-            # Move to a relative path
-            new_path = os.path.join(self.current_directory, path)
-            self.current_directory = os.path.normpath(new_path)
+        try:
+            if path == '..':
+                # Move to the parent directory
+                self.current_directory = os.path.dirname(self.current_directory)
+            elif path.startswith('/'):
+                # Move to an absolute path
+                self.current_directory = path
+            else:
+                # Move to a relative path
+                new_path = os.path.join(self.current_directory, path)
+                self.current_directory = os.path.normpath(new_path)
+        except Exception as e:
+            print(f"Error: {e}")
 
         """
         List the contents of a directory.
@@ -55,18 +61,21 @@ class InMemoryFileSystem:
         - directory (str, optional): The directory to list the contents of.
         """
     def ls(self, directory=None):
-        if directory is None:
-            directory = self.current_directory[1:]
+        try:
+            if directory is None:
+                directory = self.current_directory[1:]
 
-        if directory == '':
-            contents = list(self.file_system_structure.keys())
-            print(f"Contents of '/': {contents}")
-        else:
-            if directory in self.file_system_structure:
-                contents = list(self.file_system_structure[directory].keys())
-                print(f"Contents of {directory}: {contents}")
+            if directory == '':
+                contents = list(self.file_system_structure.keys())
+                print(f"Contents of '/': {contents}")
             else:
-                print(f"Error: Directory '{directory}' does not exist.")
+                if directory in self.file_system_structure:
+                    contents = list(self.file_system_structure[directory].keys())
+                    print(f"Contents of {directory}: {contents}")
+                else:
+                    print(f"Error: Directory '{directory}' does not exist.")
+        except Exception as e:
+            print(f"Error: {e}")
 
         """
         Create a new empty file.
@@ -78,11 +87,14 @@ class InMemoryFileSystem:
         - file_name (str): The name of the file to create.
         """
     def touch(self, file_name):
-        current_path = os.path.join(self.current_directory, file_name)
-        if current_path not in self.file_system_structure:
-            self.file_system_structure[current_path] = ""
-        else:
-            print(f"Error: File '{file_name}' already exists.")
+        try:
+            current_path = os.path.join(self.current_directory, file_name)
+            if current_path not in self.file_system_structure:
+                self.file_system_structure[current_path] = ""
+            else:
+                print(f"Error: File '{file_name}' already exists.")
+        except Exception as e:
+            print(f"Error: {e}")
 
         """
         Write text to a file.
@@ -95,11 +107,14 @@ class InMemoryFileSystem:
         - file_name (str): The name of the file to write to.
         """
     def echo(self, content, file_name):
-        current_path = os.path.join(self.current_directory, file_name)
-        if current_path in self.file_system_structure:
-            self.file_system_structure[current_path] = content
-        else:
-            print(f"Error: File '{file_name}' does not exist.")
+        try:
+            current_path = os.path.join(self.current_directory, file_name)
+            if current_path in self.file_system_structure:
+                self.file_system_structure[current_path] = content
+            else:
+                print(f"Error: File '{file_name}' does not exist.")
+        except Exception as e:
+            print(f"Error: {e}")
 
         """
         Display the contents of a file.
@@ -111,18 +126,21 @@ class InMemoryFileSystem:
         - file_path (str): The path to the file.
         """
     def cat(self, file_path):
-        full_path = os.path.join(self.current_directory, file_path)
+        try:
+            full_path = os.path.join(self.current_directory, file_path)
 
-        if full_path not in self.file_system_structure:
-            print(f"Error: File '{full_path}' does not exist.")
-            return
+            if full_path not in self.file_system_structure:
+                print(f"Error: File '{full_path}' does not exist.")
+                return
 
-        if not self.file_system_structure[full_path]:
-            print(f"Error: '{full_path}' is not a file.")
-            return
+            if not self.file_system_structure[full_path]:
+                print(f"Error: '{full_path}' is not a file.")
+                return
 
-        contents = self.file_system_structure[full_path]
-        print(f"Contents of {full_path}: {contents}")
+            contents = self.file_system_structure[full_path]
+            print(f"Contents of {full_path}: {contents}")
+        except Exception as e:
+            print(f"Error: {e}")
 
         """
         Move a file or directory to another location.
@@ -135,11 +153,14 @@ class InMemoryFileSystem:
         - destination_path (str): The destination path.
         """
     def mv(self, source_path, destination_path):
-        if source_path in self.file_system_structure:
-            content = self.file_system_structure.pop(source_path)
-            self.file_system_structure[destination_path] = content
-        else:
-            print(f"Error: Source path '{source_path}' does not exist.")
+        try:
+            if source_path in self.file_system_structure:
+                content = self.file_system_structure.pop(source_path)
+                self.file_system_structure[destination_path] = content
+            else:
+                print(f"Error: Source path '{source_path}' does not exist.")
+        except Exception as e:
+            print(f"Error: {e}")
 
         """
         Copy a file or directory to another location.
@@ -152,11 +173,14 @@ class InMemoryFileSystem:
         - destination_path (str): The destination path.
         """
     def cp(self, source_path, destination_path):
-        if source_path in self.file_system_structure:
-            content = self.file_system_structure[source_path]
-            self.file_system_structure[destination_path] = content
-        else:
-            print(f"Error: Source path '{source_path}' does not exist.")
+        try:
+            if source_path in self.file_system_structure:
+                content = self.file_system_structure[source_path]
+                self.file_system_structure[destination_path] = content
+            else:
+                print(f"Error: Source path '{source_path}' does not exist.")
+        except Exception as e:
+            print(f"Error: {e}")
 
         """
         Remove a file or directory.
@@ -168,10 +192,13 @@ class InMemoryFileSystem:
         - path (str): The path of the file or directory to remove.
         """
     def rm(self, path):
-        if path in self.file_system_structure:
-            del self.file_system_structure[path]
-        else:
-            print(f"Error: Path '{path}' does not exist.")
+        try:
+            if path in self.file_system_structure:
+                del self.file_system_structure[path]
+            else:
+                print(f"Error: Path '{path}' does not exist.")
+        except Exception as e:
+            print(f"Error: {e}")
 
         """
         Save the current state of the file system to a file.
@@ -182,13 +209,16 @@ class InMemoryFileSystem:
         - file_path (str): The path to the file where the state will be saved.
         """
     def save_state(self, file_path):
-        state_data = {
-            "current_directory": self.current_directory,
-            "file_system_structure": self.file_system_structure
-        }
+        try:
+            state_data = {
+                "current_directory": self.current_directory,
+                "file_system_structure": self.file_system_structure
+            }
 
-        with open(file_path, 'w') as file:
-            json.dump(state_data, file)
+            with open(file_path, 'w') as file:
+                json.dump(state_data, file)
+        except Exception as e:
+            print(f"Error: {e}")
 
         """
         Load a previously saved state from a file.
@@ -199,8 +229,11 @@ class InMemoryFileSystem:
         - file_path (str): The path to the file from which the state will be loaded.
         """
     def load_state(self, file_path):
-        with open(file_path, 'r') as file:
-            state_data = json.load(file)
+        try:
+            with open(file_path, 'r') as file:
+                state_data = json.load(file)
 
-        self.current_directory = state_data["current_directory"]
-        self.file_system_structure = state_data["file_system_structure"]
+            self.current_directory = state_data["current_directory"]
+            self.file_system_structure = state_data["file_system_structure"]
+        except Exception as e:
+            print(f"Error: {e}")
